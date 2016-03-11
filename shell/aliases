@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# Allow aliases to be with sudo
+alias sudo="sudo "
+
+# Setup a blank index.html file
+alias blankhtml="wget git.io/blank -O index.html"
+
+# Start focus session
+alias focus="open focus://focus?minutes=25"
+
+# Flush DNS cache
+alias flushdns="dscacheutil -flushcache"
+
+# Show/hide hidden files in Finder
+alias showdotfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hidedotfiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+
+# Shortcut to edit hosts
+# alias hosts='sudo $EDITOR /etc/hosts'
+# $ sudo atom doesn't work for some reason
+alias hosts='sudo sublime /etc/hosts'
+
+# Monitor activity with htop
+alias activitymonitor='sudo htop'
+
+# IP addresses
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias localip="ifconfig | grep -A 1 \"en\" | grep broadcast | cut -d \" \" -f 2 | tr \"\\n\" \" \""
+
+# Notify me when a command finishes running
+# e.g. $ brew update && brew upgrade && notify-complete
+alias notify-complete="terminal-notifier -title '👍' -message 'finished'"
+
+# Copy my public key to the pasteboard
+alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | printf '🔑 %q Public key copied to pasteboard.\n'"
+
+# Remove symlinks
+alias rmsymlinks="find -L . -maxdepth 1 -type l -exec rm {} \;"
+
+# Use wget for speedtest
+alias speedtest="wget -O /dev/null http://speedtest.sea01.softlayer.com/downloads/test100.zip"
+
+# Get OS X Software, Homebrew, and npm updates
+alias update-everything='sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g; notify-complete'
+
+# config zsh
+alias zshconfig="atom ~/.zshrc"

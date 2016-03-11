@@ -1,0 +1,115 @@
+[alias]
+  # https://git.wiki.kernel.org/articles/a/l/i/Aliases.html
+
+  # Add untracked, remove deleted, and show status
+  add-all = !git add -A && git status
+
+  amend = commit --amend --no-edit
+
+  # Remove untracked files/directories and clear any stashes.
+  cleanup = !git clean -id && git stash clear
+
+  # Diff what is staged for the next commit
+  new = diff --cached
+
+  # Pretty Graph History
+  graph = log --graph --abbrev-commit --decorate --date=relative --pretty=material
+  graph-all = log --graph --abbrev-commit --decorate --date=relative --pretty=material --all
+
+  # Simple Pretty History
+  logp = log --pretty=nice --date-order
+
+  # Diffstat log
+  logst = log --stat --abbrev-commit
+  # Short format diffstat log
+  logsf = log --stat --format=oneline --abbrev-commit
+
+  # Change last commit message
+  push-it = !git sync && afplay ~/Music/push-it.mp3
+
+  # Change last commit message
+  recommit = commit --amend
+
+  # Who's been active on the repository in the last 3 months
+  # Displays committers in ascending order of number of commits
+  stats = !git shortlog --numbered --summary --pretty=material --email --no-merges --since=\"3 months\" | sort -r
+
+  # Unstage a file after an accidental add
+  unstage = reset HEAD
+
+  # Undo last commit
+  undo = reset HEAD~1
+
+
+  # Remove branches that aren't tracked remotely anymore and then garbage collect the repo
+  trim = !git remote prune origin && git gc
+
+  # Git Legit commands
+	switch = !legit switch
+	branches = !legit branches
+	sprout = !legit sprout
+	unpublish = !legit unpublish
+	harvest = !legit harvest
+	sync = !legit sync
+	publish = !legit publish
+	graft = !legit graft
+	resync = !legit resync
+
+[color]
+  # color opts: normal, black, red, green, yellow, blue, magenta, cyan, or white
+  ui = auto
+  interactive = auto
+
+[core]
+  # Use custom `.gitignore` and `.gitattributes`
+  excludesfile = ~/.gitignore
+  attributesfile = ~/.gitattributes
+  editor = pico
+	autocrlf = input
+
+[credential]
+  helper = osxkeychain
+
+[diff]
+  tool = Kaleidoscope
+
+[difftool]
+  prompt = false
+
+[pretty]
+# tut: http://gitimmersion.com/lab_10.html
+# ref: http://linux.die.net/man/1/git-log
+# Result: <short-sha> <commit-message> (<pointer-names>) -- <commit-author-name>; <relative-time>
+  nice = "%C(yellow)%h%C(reset) %C(white)%s%C(cyan)%d%C(reset) -- %an; %ar"
+  material = "%C(blue)%h%C(reset) - %C(green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(yellow)%d%C(reset)"
+
+# Difference between current and simple: http://stackoverflow.com/a/23918418/89484
+[push]
+  default = current
+
+[user]
+  email = rruiz@sigmagroup.com
+
+[mergetool "Kaleidoscope"]
+  cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+  trustexitcode = true
+
+[merge]
+  tool = Kaleidoscope
+
+[difftool "Kaleidoscope"]
+  cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+
+[mergetool]
+  prompt = false
+  keepBackup = false
+
+[filter "hawser"]
+  clean = git hawser clean %f
+  smudge = git hawser smudge %f
+  required = true
+
+[filter "lfs"]
+  clean = git lfs clean %f
+  smudge = git lfs smudge %f
+  required = true

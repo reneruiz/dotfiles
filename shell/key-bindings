@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+# Go back/forth in command-line with Alt + Left/Right Arrows
+bindkey '\e\e[C' forward-word
+bindkey '\e\e[D' backward-word
