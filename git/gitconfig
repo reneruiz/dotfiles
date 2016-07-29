@@ -25,8 +25,8 @@
   # Short format diffstat log
   logsf = log --stat --format=oneline --abbrev-commit
 
-  # Change last commit message
-  push-it = !git sync && afplay ~/Music/push-it.mp3
+  # Oooh, baby, baby... Baby, baby
+  push-it = !afplay ~/Music/push-it.mp3 & git sync
 
   # Change last commit message
   recommit = commit --amend
