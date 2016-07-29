@@ -4,12 +4,13 @@
   # Add untracked, remove deleted, and show status
   add-all = !git add -A && git status
 
+  # Amend staged changes to last commit. Useful if I forget to add something
   amend = commit --amend --no-edit
 
-  # Remove untracked files/directories and clear any stashes.
+  # Remove untracked files/directories and clear any stashes
   cleanup = !git clean -id && git stash clear
 
-  # Diff what is staged for the next commit
+  # Diff what you've staged for the next commit
   new = diff --cached
 
   # Pretty Graph History
