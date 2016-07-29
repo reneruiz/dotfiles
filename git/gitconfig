@@ -35,15 +35,17 @@
   # Displays committers in ascending order of number of commits
   stats = !git shortlog --numbered --summary --pretty=material --email --no-merges --since=\"3 months\" | sort -r
 
+  # Remove branches that aren't tracked remotely anymore and then garbage collect the repo
+  trim = !git remote prune origin && git gc
+
   # Unstage a file after an accidental add
   unstage = reset HEAD
 
-  # Undo last commit
+  # Undo last commit. Places changes back into stage.
   undo = reset HEAD~1
 
-
-  # Remove branches that aren't tracked remotely anymore and then garbage collect the repo
-  trim = !git remote prune origin && git gc
+  # You fucked something up. Move HEAD and everything back one commit.
+  wtf = reset --hard HEAD^
 
   # Git Legit commands
 	switch = !legit switch
