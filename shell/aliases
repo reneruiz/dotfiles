@@ -46,3 +46,5 @@ alias update-everything='sudo softwareupdate -i -a; brew update; brew upgrade; b
 
 # config zsh
 alias zshconfig="atom ~/.zshrc"
+
+alias react="create-react-app"
