@@ -13,8 +13,8 @@ alias focus="open focus://focus?minutes=25"
 alias flushdns="dscacheutil -flushcache"
 
 # Show/hide hidden files in Finder
-alias showdotfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
-alias hidedotfiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+alias showhiddenfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hidehiddenfiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
 
 # Shortcut to edit hosts
 # alias hosts='sudo $EDITOR /etc/hosts'
@@ -48,3 +48,5 @@ alias update-everything='sudo softwareupdate -i -a; brew update; brew upgrade; b
 alias zshconfig="atom ~/.zshrc"
 
 alias reloadshell="source ~/.zshrc"
+
+alias loadnvm=". /usr/local/opt/nvm/nvm.sh"
