@@ -4,14 +4,14 @@
   # Add untracked, remove deleted, and show status
   add-all = !git add -A && git status
 
+  # Display branches sorted by last modified
+  branches = "!f() { current=$(git symbolic-ref --short HEAD); max=$(git for-each-ref --format='%(refname:short)' refs/heads | awk '{ if (length > max) { max = length } } END { print max }'); git for-each-ref --sort='-authordate:iso8601' --format='%(refname:short)%09%(authordate:relative)' refs/heads | awk -F $'\t' -v current_branch=\"$current\" -v max_len=\"$max\" '{ color = ($1 == current_branch) ? \"\\033[35m\" : \"\\033[32m\"; printf \"%s%-\" max_len + 2 \"s\\033[0m%s\\n\", color, $1, $2 }'; }; f"
+
   # Amend staged changes to last commit. Useful if I forget to add something
   amend = commit --amend --no-edit
 
-  # Remove untracked files/directories and clear any stashes
-  cleanup = !git clean -id && git stash clear
-
-  # Diff what you've staged for the next commit
-  new = diff --cached
+  # Remove untracked branches that have already been merged into long standing branches
+  cleanup = "!git branch --merged | grep  -v '\\*\\|master\\|dev' | xargs -n 1 -r git branch -d"
 
   # Pretty Graph History
   graph = log --graph --abbrev-commit --decorate --date=relative --pretty=material
@@ -25,18 +25,39 @@
   # Short format diffstat log
   logsf = log --stat --format=oneline --abbrev-commit
 
+  # Post Unpublish Cleanup
+  post-unpub = !git fetch --prune && git branch --unset-upstream
+
+  # publish git branch
+  publish = push -u origin HEAD
+
   # Oooh, baby, baby... Baby, baby
-  push-it = !afplay ~/Music/push-it.mp3 & git sync
+  push-it = !git sync && afplay ~/Music/push-it.mp3
 
   # Change last commit message
-  recommit = commit --amend
+  reword = commit --amend
+
+  # Open config
+  settings = !code ~/.gitconfig
+
+  # Diff what you've staged for the next commit
+  staged = diff --cached
 
   # Who's been active on the repository in the last 3 months
   # Displays committers in ascending order of number of commits
   stats = !git shortlog --numbered --summary --pretty=material --email --no-merges --since=\"3 months\" | sort -r
 
-  # Remove branches that aren't tracked remotely anymore and then garbage collect the repo
-  trim = !git remote prune origin && git gc
+  # What did I do yesterday? (doesn't work for Mondays)
+  standup = !ME=$(git config user.name) && git log --author="\"$ME\"" --since=\"1 day\" --pretty=format:'%C(blue)%h%C(reset) - %C(green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)%C(reset)%C(yellow)%d%C(reset)' --graph --decorate --abbrev-commit --date=relative
+
+  # Shorthand for git switch
+  sw = switch
+
+  # Fake legit sync (wip)
+  sync = !git stash save -u && git pull && git push && git stash pop
+
+  # Treat untracked files like tracked files so you can add in patches
+  track = add --intent-to-add
 
   # Unstage a file after an accidental add
   unstage = reset HEAD
@@ -44,19 +65,11 @@
   # Undo last commit. Places changes back into stage.
   undo = reset HEAD~1
 
+  # Unpublish git branch
+  unpublish = push origin --delete
+
   # You fucked something up. Move HEAD and everything back one commit.
   wtf = reset --hard HEAD^
-
-  # Git Legit commands
-	switch = !legit switch
-	branches = !legit branches
-	sprout = !legit sprout
-	unpublish = !legit unpublish
-	harvest = !legit harvest
-	sync = !legit sync
-	publish = !legit publish
-	graft = !legit graft
-	resync = !legit resync
 
 [color]
   # color opts: normal, black, red, green, yellow, blue, magenta, cyan, or white
@@ -65,16 +78,17 @@
 
 [core]
   # Use custom `.gitignore` and `.gitattributes`
-  excludesfile = ~/.gitignore
+  excludesfile = /Users/reneruiz/.gitignore_global
   attributesfile = ~/.gitattributes
   editor = pico
-	autocrlf = input
+  autocrlf = input
 
 [credential]
   helper = osxkeychain
 
 [diff]
   tool = Kaleidoscope
+  colorMoved = zebra
 
 [difftool]
   prompt = false
@@ -86,12 +100,9 @@
   nice = "%C(yellow)%h%C(reset) %C(white)%s%C(cyan)%d%C(reset) -- %an; %ar"
   material = "%C(blue)%h%C(reset) - %C(green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(yellow)%d%C(reset)"
 
-# Difference between current and simple: http://stackoverflow.com/a/23918418/89484
 [push]
+# Difference between current and simple: http://stackoverflow.com/a/23918418/89484
   default = current
-
-[user]
-  email = rruiz@sigmagroup.com
 
 [mergetool "Kaleidoscope"]
   cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
@@ -107,12 +118,20 @@
   prompt = false
   keepBackup = false
 
-[filter "hawser"]
-  clean = git hawser clean %f
-  smudge = git hawser smudge %f
-  required = true
+[pull]
+  rebase = true
+
+[fetch]
+  prune = true
 
 [filter "lfs"]
-  clean = git lfs clean %f
-  smudge = git lfs smudge %f
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
   required = true
+
+[init]
+  defaultBranch = main
+
+[pager]
+  branch = false
