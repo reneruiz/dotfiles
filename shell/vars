@@ -4,7 +4,7 @@
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='pico'
 else
-  export EDITOR='atom'
+  export EDITOR='code'
 fi
 
 # Ignore duplicate commands in the history
